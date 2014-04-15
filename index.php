@@ -36,7 +36,7 @@
         <!-- The drop down menu -->
         <ul class="nav pull-right">
 
-<?php if () { ?> <li class="dropdown" id="menuLogin">
+<li class="dropdown" id="menuLogin">
             <a href="#" id="navLogin"><i class="icon-user"></i> Acceder</a>
             <div id="loginform"class="dropdown-menu" style="padding:17px;">
              <form action="#" method="post">
@@ -68,9 +68,6 @@
     </form>
             </div>
           </li>
-<?php
-}
-?>
         </ul>
 
       </div>

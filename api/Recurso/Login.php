@@ -14,11 +14,11 @@ class Login extends Conexion{
                 $response->api_key=time()."_".md5(rand());
                 $futureDate = time()+(60*15);
                 $formatDate = date("Y-m-d H:i:s", $futureDate);
+                $user->api_key()->delete();
                 $user->api_key()->insert(array(
                     "api_key" =>$response->api_key,
                     "vencimiento" => $formatDate
                 ));
-                echo (string)$user;
             }
             else{
                 http_response_code(401);

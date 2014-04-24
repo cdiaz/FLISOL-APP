@@ -1,0 +1,9 @@
+/*---FIX TEMPLATE---*/
+.extra{
+	position: fixed;
+	bottom: 0px;
+	width: 100%;
+}
+.main{
+	border-bottom: none;
+}

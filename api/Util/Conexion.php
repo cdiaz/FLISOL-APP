@@ -2,6 +2,7 @@
 class Conexion{
     public $bd;
     public $validarApiKey=false;
+    public $rolesPermitidos="*";
     
     function __construct() {
         $connection = new PDO("mysql:dbname=flisol","root","root");

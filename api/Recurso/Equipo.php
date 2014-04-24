@@ -116,7 +116,6 @@ class Equipo extends Conexion{
             }
             //OUTPUT: {"total":1,"equipos":[{"id":"16","tipo":"PORTATIL","marca":"TOSHIBA","modelo":"123487","estado_actual":"REGISTRO"
             //,"tiempo":"2014-04-23 23:29:07","propietario":"Sergio Andr\u00e9s \u00d1ustes"}]}
-
         }
         echo json_encode($response);
     }

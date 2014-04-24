@@ -2,6 +2,7 @@
 ini_set('display_errors',1);
 error_reporting(E_ALL);
 header('Access-Control-Allow-Origin: *');
+require_once 'Util/FuncionesComunes.php';
 
 function __autoload($clase) {
     if (file_exists("Recurso/$clase.php")) {

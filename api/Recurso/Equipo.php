@@ -1,29 +1,31 @@
 <?php
-class Persona extends Conexion{
+class Equipo extends Conexion{
  
-    //Crea un dueño de equipo
+    //Crea un nuevo equipo en el sistema. 
+    //Y le crea automaticamente el estado de registro. 
+    //Solo los comentarios del registro se envian en un arreglo json.
     function post(){
-        $documento=$_REQUEST['documento'];
-        $tipo_documento=$_REQUEST['tipo_documento'];
+        $equipo=$this->bd->equipo()->insert(array(
+            'tipo'=>$_REQUEST['tipo'],
+            'marca'=>$_REQUEST['marca'],
+            'modelo'=>$_REQUEST['modelo'],
+            'persona_id'=>$_REQUEST['persona'],
+            'evento_id'=>1 //WARNING: Después toca actualizar para que tome el evento actual, futura versión XD
+        ));
+        $estado=$equipo->estado()->insert(array(
+            'persona_id'=> personaConectada(),
+            'tipo'=>"REGISTRO"
+        ));
+        $comentarios=json_decode($_REQUEST['comentarios']);//JSON=[{"comentario":"a"},{"comentario":"b"}]
+        foreach($comentarios as $c){
+            $estado->comentario()->insert(array(
+                "descripcion"=>$c->comentario
+            ));
+        }
         $response=new stdClass();
-        if($this->bd->persona()->where("documento=? and tipo_documento=?",$documento,$tipo_documento)->fetch()){
-            http_response_code(409);
-            $response->descripcion="Ya se ha registrado la persona";
-            //OUTPUT: {"descripcion":"Ya se ha registrado la persona"}
-        }
-        else{
-            $fila=$this->bd->persona()->insert(array(
-                "documento" =>$documento,
-                "tipo_documento" =>$tipo_documento,
-                "nombre" =>$_REQUEST['nombre'],
-                "telefono" =>$_REQUEST['telefono'],
-                "email" =>$_REQUEST['email']           
-            ));            
-            http_response_code(201);
-            $response->id=$fila["id"];
-            $response->descripcion="Registro correcto";
-            //OUTPUT: {"id":"9","descripcion":"Registro correcto"}
-        }
+        $response->equipo=$equipo["id"];
+        $response->estado="REGISTRO";   
+        //OUTPUT: {"equipo":"16","estado":"REGISTRO"}
         echo json_encode($response);
     }
     

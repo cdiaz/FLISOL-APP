@@ -31,59 +31,92 @@ class Equipo extends Conexion{
     
     function get(){
         $response=new stdClass();
-        //Consulta la persona con ID especificado
+        //Trae la informacion del equipo, su estado actual, y todos sus comentarios,
         if(!empty($_REQUEST["id"])){
             $id=$_REQUEST["id"];
-            $fila=$this->bd->persona[$id];
-            if($fila){
-                $response->documento=$fila["documento"];
-                $response->tipo_documento=$fila["tipo_documento"];
-                $response->nombre=utf8_encode($fila["nombre"]);
-                $response->telefono=$fila["telefono"];
-                $response->email=$fila["email"];
-                $response->imagen=$fila["imagen"];
-                //OUTPUT: {"documento":"1117516483","tipo_documento":"CEDULA","nombre":"Sergio Andr\u00e9s \u00d1ustes","telefono":"3115561825","email":"infinito84@gmail.com","imagen":"img\/sergio.png"}
+            $e=$this->bd->estado->select("equipo.tipo as tipo_equipo,equipo.marca,equipo.modelo,estado.*")->where("equipo.id=?",$id)->order("estado.tiempo DESC")->fetch();
+            if($e){
+                $response->tipo=$e["tipo_equipo"];
+                $response->marca=$e["marca"];
+                $response->modelo=utf8_encode($e["modelo"]);
+                $response->estado_actual=$e["tipo"];
+                $response->tiempo=$e["tiempo"];
+                $response->comentarios=array();
+                foreach($e->comentario() as $c){
+                    $comentario=new stdClass();
+                    $comentario->comentario=$c["descripcion"];
+                    $response->comentarios[]=$comentario;
+                }
+                //OUTPUT: {"tipo":"PORTATIL","marca":"TOSHIBA","modelo":"123487","estado_actual":"REGISTRO","tiempo":"2014-04-23 23:29:07"
+                //,"comentarios":[{"comentario":"hola"},{"comentario":"hola2"}]}
             }
             else{
                 http_response_code(404);
-                $response->description="No existe persona";
-                //OUTPUT: {"description":"No existe persona"}
+                $response->description="No existe equipo con id $id";
+                //OUTPUT: {"description":"No existe equipo con tal id"}
             }
         }
         //Consulta las personas segun su participacion, TRANSPORTADOR o INSTALADOR
         else if(!empty($_REQUEST["tipo"])){
             $tipo=$_REQUEST["tipo"];
-            $participantes=$this->bd->participante()->where("rol=?",$tipo);
-            $response->total=$participantes->count();
-            $response->participantes=array();
-            foreach($participantes as $p){
-                $persona=new stdClass();
-                $persona->documento=$p->usuario->persona["documento"];
-                $persona->tipo_documento=$p->usuario->persona["tipo_documento"];
-                $persona->nombre=utf8_encode($p->usuario->persona["nombre"]);
-                $persona->telefono=$p->usuario->persona["telefono"];
-                $persona->email=$p->usuario->persona["email"];
-                $persona->imagen=$p->usuario->persona["imagen"];
-                $response->participantes[]=$persona;
+            $equipos=$this->bd->estado->select("equipo.tipo as tipo_equipo,equipo.marca,equipo.modelo,estado.*")->where("estado.tipo=?",$tipo)->order("estado.tiempo DESC")->group("equipo.id");
+            $response->total=$equipos->count();
+            $response->equipos=array();
+            foreach($equipos as $e){
+                $equipo=new stdClass();
+                $equipo->id=$e["equipo_id"];
+                $equipo->tipo=$e["tipo_equipo"];
+                $equipo->marca=$e["marca"];
+                $equipo->modelo=utf8_encode($e["modelo"]);
+                $equipo->estado_actual=$e["tipo"];
+                $equipo->tiempo=$e["tiempo"];
+                $equipo->participante=utf8_encode($e->persona["nombre"]);
+                $equipo->imagen=$e->persona["imagen"];
+                $response->equipos[]=$equipo;
             }
-            //OUTPUT: {"total":1,"participantes":[{"documento":"1118021357","tipo_documento":"CEDULA","nombre":"Cristiam Diaz","telefono":"3144681029","email":"c.diaz@udla.edu.co","imagen":"img\/cristiam.png"}]}
+            //OUTPUT: {"total":1,"equipos":[{"id":"16","tipo":"PORTATIL","marca":"TOSHIBA","modelo":"123487","estado_actual":"REGISTRO"
+            //,"tiempo":"2014-04-23 23:29:07","participante":"Sergio Andr\u00e9s \u00d1ustes","imagen":"img\/sergio.png"}]}
+        }
+        else if(!empty($_REQUEST["documento"])){
+            $documento=$_REQUEST["documento"];
+            $tipo_documento=$_REQUEST["tipo_documento"];
+            $equipos=$this->bd->equipo->select("equipo.tipo as tipo_equipo,equipo.marca,equipo.modelo,estado:*")->where("persona.documento=? and persona.tipo_documento=?",$documento,$tipo_documento)->order("estado:tiempo DESC")->group("equipo.id");
+            $response->total=$equipos->count();
+            $response->equipos=array();
+            foreach($equipos as $e){
+                $equipo=new stdClass();
+                $equipo->id=$e["equipo_id"];
+                $equipo->tipo=$e["tipo_equipo"];
+                $equipo->marca=$e["marca"];
+                $equipo->modelo=utf8_encode($e["modelo"]);
+                $equipo->estado_actual=$e["tipo"];
+                $equipo->tiempo=$e["tiempo"];
+                $equipo->propietario=utf8_encode($e->persona["nombre"]);
+                $response->equipos[]=$equipo;
+            }
+            //OUTPUT: {"total":1,"equipos":[{"id":"16","tipo":"PORTATIL","marca":"TOSHIBA","modelo":"123487"
+            //,"estado_actual":"REGISTRO","tiempo":"2014-04-23 23:29:07","propietario":"Sergio Andr\u00e9s \u00d1ustes"}]}
+
         }
         //Consulta los dueños de equipo de un sistema registrados
         else{
-            $sin_usuario=$this->bd->persona()->where("usuario:id is null")->group("persona.id");
-            $response->total=$sin_usuario->count();
-            $response->personas=array();
-            foreach($sin_usuario as $p){
-                $persona=new stdClass();
-                $persona->documento=$p["documento"];
-                $persona->tipo_documento=$p["tipo_documento"];
-                $persona->nombre=utf8_encode($p["nombre"]);
-                $persona->telefono=$p["telefono"];
-                $persona->email=$p["email"];
-                $persona->imagen=$p["imagen"];
-                $response->personas[]=$persona;
+            $equipos=$this->bd->equipo->select("equipo.tipo as tipo_equipo,equipo.marca,equipo.modelo,estado:*")->order("estado:tiempo DESC")->group("equipo.id");
+            $response->total=$equipos->count();
+            $response->equipos=array();
+            foreach($equipos as $e){
+                $equipo=new stdClass();
+                $equipo->id=$e["equipo_id"];
+                $equipo->tipo=$e["tipo_equipo"];
+                $equipo->marca=$e["marca"];
+                $equipo->modelo=utf8_encode($e["modelo"]);
+                $equipo->estado_actual=$e["tipo"];
+                $equipo->tiempo=$e["tiempo"];
+                $equipo->propietario=utf8_encode($e->persona["nombre"]);
+                $response->equipos[]=$equipo;
             }
-            //OUTPUT: {"total":1,"personas":[{"documento":"1117516482","tipo_documento":"CEDULA","nombre":"Sergio Andr\u00c3\u00a9s \u00c3\u0091ustes","telefono":"3115561825","email":"infinito84@gmail.com","imagen":null}]}
+            //OUTPUT: {"total":1,"equipos":[{"id":"16","tipo":"PORTATIL","marca":"TOSHIBA","modelo":"123487","estado_actual":"REGISTRO"
+            //,"tiempo":"2014-04-23 23:29:07","propietario":"Sergio Andr\u00e9s \u00d1ustes"}]}
+
         }
         echo json_encode($response);
     }

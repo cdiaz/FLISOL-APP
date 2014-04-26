@@ -7,21 +7,24 @@ Bootstrap Admin Template by EGrappler.com
 /*------------------------------------------------------------------
 [1. Global]
 */
-
+@font-face{
+	font-family: Ubuntu;
+	src: url(../font/Ubuntu.woff);
+}
 body {
 	background: #f9f6f1;
-	font: 13px/1.7em 'Open Sans';
+	font: 13px/1.7em 'Ubuntu';
 }
     
 p { 
-	font: 13px/1.7em 'Open Sans'; 	
+	font: 13px/1.7em 'Ubuntu'; 	
 }
     
 input,
 button,
 select,
 textarea {
-  font-family: 'Open Sans';
+  font-family: 'Ubuntu';
 }
 
 .dropdown .dropdown-menu {
@@ -84,7 +87,7 @@ textarea {
 }
 
 .navbar .nav a {
-	font-size: 11px;
+	font-size: 15px;
 }
 .navbar .nav>li>a { color:#fff !important;}
 .navbar .brand {
@@ -579,7 +582,8 @@ ul.messages_layout li a.avatar {
 ul.messages_layout li a.avatar img {
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
-	border-radius: 5px
+	border-radius: 5px;
+	width:60px;
 }
 ul.messages_layout li .message_wrap {
 	-webkit-border-radius: 3px;

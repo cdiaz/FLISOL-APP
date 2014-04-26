@@ -9,6 +9,7 @@ class Login extends Conexion{
         if($user){
             if($user["clave"]==$clave){
                 $response->nombre=  utf8_encode($user->persona['nombre']);
+                $response->imagen=  $user->persona['imagen'];
                 $participante=$user->participante()->fetch();
                 $response->rol=$participante["rol"];   
                 $response->api_key=time()."_".md5(rand());

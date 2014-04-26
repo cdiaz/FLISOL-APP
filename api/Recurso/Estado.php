@@ -12,6 +12,8 @@ class Estado extends Conexion{
                 'persona_id'=> $_REQUEST["persona"],
                 'tipo'=>$estado
             ));
+            $equipo["estado_id"]=$estado["id"];
+            $equipo->update();
             $comentarios=json_decode($_REQUEST['comentarios']);//JSON=[{"comentario":"a"},{"comentario":"b"}]
             foreach($comentarios as $c){
                 $estado->comentario()->insert(array(

@@ -22,6 +22,8 @@ class Equipo extends Conexion{
                 "descripcion"=>$c->comentario
             ));
         }
+        $equipo["estado_id"]=$estado["id"];
+        $equipo->update();
         $response=new stdClass();
         $response->equipo=$equipo["id"];
         $response->estado="REGISTRO";   
@@ -34,15 +36,15 @@ class Equipo extends Conexion{
         //Trae la informacion del equipo, su estado actual, y todos sus comentarios,
         if(!empty($_REQUEST["id"])){
             $id=$_REQUEST["id"];
-            $e=$this->bd->estado->select("equipo.tipo as tipo_equipo,equipo.marca,equipo.modelo,estado.*")->where("equipo.id=?",$id)->order("estado.tiempo DESC")->fetch();
+            $e=$this->bd->equipo->where("equipo.id=?",$id)->fetch();
             if($e){
-                $response->tipo=$e["tipo_equipo"];
+                $response->tipo=$e["tipo"];
                 $response->marca=$e["marca"];
-                $response->modelo=utf8_encode($e["modelo"]);
-                $response->estado_actual=$e["tipo"];
-                $response->tiempo=$e["tiempo"];
+                $response->modelo=$e["modelo"];
+                $response->estado_actual=$e->estado["tipo"];
+                $response->tiempo=$e->estado["tiempo"];
                 $response->comentarios=array();
-                foreach($e->comentario() as $c){
+                foreach($e->estado->comentario() as $c){
                     $comentario=new stdClass();
                     $comentario->comentario=$c["descripcion"];
                     $response->comentarios[]=$comentario;
@@ -59,19 +61,20 @@ class Equipo extends Conexion{
         //Consulta las personas segun su participacion, TRANSPORTADOR o INSTALADOR
         else if(!empty($_REQUEST["tipo"])){
             $tipo=$_REQUEST["tipo"];
-            $equipos=$this->bd->estado->select("equipo.tipo as tipo_equipo,equipo.marca,equipo.modelo,estado.*")->where("estado.tipo=?",$tipo)->order("estado.tiempo DESC")->group("equipo.id");
+            $equipos=$this->bd->equipo->select("equipo.tipo as tipo_equipo,equipo.marca,equipo.modelo,estado.*")->where("estado.tipo=?",$tipo);
             $response->total=$equipos->count();
             $response->equipos=array();
             foreach($equipos as $e){
                 $equipo=new stdClass();
                 $equipo->id=$e["equipo_id"];
-                $equipo->tipo=$e["tipo_equipo"];
-                $equipo->marca=$e["marca"];
-                $equipo->modelo=utf8_encode($e["modelo"]);
-                $equipo->estado_actual=$e["tipo"];
-                $equipo->tiempo=$e["tiempo"];
-                $equipo->participante=utf8_encode($e->persona["nombre"]);
-                $equipo->imagen=$e->persona["imagen"];
+                $equipo->text= "No: ".$e["equipo_id"].' - '.$e["tipo_equipo"].' - '.$e["marca"].' - '.$e["modelo"];
+                //$equipo->tipo=$e["tipo_equipo"];
+                //$equipo->marca=$e["marca"];
+                //$equipo->modelo=utf8_encode($e["modelo"]);
+                //$equipo->estado_actual=$e["tipo"];
+                //$equipo->tiempo=$e["tiempo"];
+                //$equipo->participante=utf8_encode($e->persona["nombre"]);
+                //$equipo->imagen=$e->persona["imagen"];
                 $response->equipos[]=$equipo;
             }
             //OUTPUT: {"total":1,"equipos":[{"id":"16","tipo":"PORTATIL","marca":"TOSHIBA","modelo":"123487","estado_actual":"REGISTRO"
@@ -80,7 +83,7 @@ class Equipo extends Conexion{
         else if(!empty($_REQUEST["documento"])){
             $documento=$_REQUEST["documento"];
             $tipo_documento=$_REQUEST["tipo_documento"];
-            $equipos=$this->bd->equipo->select("equipo.tipo as tipo_equipo,equipo.marca,equipo.modelo,estado:*")->where("persona.documento=? and persona.tipo_documento=?",$documento,$tipo_documento)->order("estado:tiempo DESC")->group("equipo.id");
+            $equipos=$this->bd->equipo->select("equipo.tipo as tipo_equipo,equipo.marca,equipo.modelo,estado.*")->where("persona.documento=? and persona.tipo_documento=?",$documento,$tipo_documento)->group("equipo.id");
             $response->total=$equipos->count();
             $response->equipos=array();
             foreach($equipos as $e){

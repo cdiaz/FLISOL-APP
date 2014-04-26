@@ -5,7 +5,7 @@ class Conexion{
     public $rolesPermitidos="*";
     
     function __construct() {
-        $connection = new PDO("mysql:dbname=flisol","root","root");
+        $connection = new PDO("mysql:dbname=flisol","root","proteus25");
         $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
         $connection->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
         $this->bd= new NotORM($connection);

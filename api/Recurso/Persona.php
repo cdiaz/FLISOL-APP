@@ -6,7 +6,7 @@ class Persona extends Conexion{
         $documento=$_REQUEST['documento'];
         $tipo_documento=$_REQUEST['tipo_documento'];
         $response=new stdClass();
-        if($this->bd->persona()->where("documento=? and tipo_documento=?",$documento,$tipo_documento)->fetch()){
+        if($this->bd->persona()->where("documento=? and tipo_documento=$tipo_documento",$documento)->fetch()){
             http_response_code(409);
             $response->descripcion="Ya se ha registrado la persona";
             //OUTPUT: {"descripcion":"Ya se ha registrado la persona"}
@@ -56,6 +56,7 @@ class Persona extends Conexion{
             $response->participantes=array();
             foreach($participantes as $p){
                 $persona=new stdClass();
+                $persona->id=$p->usuario->persona["id"];
                 $persona->documento=$p->usuario->persona["documento"];
                 $persona->tipo_documento=$p->usuario->persona["tipo_documento"];
                 $persona->nombre=utf8_encode($p->usuario->persona["nombre"]);
@@ -73,12 +74,13 @@ class Persona extends Conexion{
             $response->personas=array();
             foreach($sin_usuario as $p){
                 $persona=new stdClass();
+                $persona->id=$p["id"];
                 $persona->documento=$p["documento"];
-                $persona->tipo_documento=$p["tipo_documento"];
-                $persona->nombre=utf8_encode($p["nombre"]);
-                $persona->telefono=$p["telefono"];
-                $persona->email=$p["email"];
-                $persona->imagen=$p["imagen"];
+                //$persona->tipo_documento=$p["tipo_documento"];
+                $persona->text=utf8_encode($p["nombre"]);
+                //$persona->telefono=$p["telefono"];
+                //$persona->email=$p["email"];
+                //$persona->imagen=$p["imagen"];
                 $response->personas[]=$persona;
             }
             //OUTPUT: {"total":1,"personas":[{"documento":"1117516482","tipo_documento":"CEDULA","nombre":"Sergio Andr\u00c3\u00a9s \u00c3\u0091ustes","telefono":"3115561825","email":"infinito84@gmail.com","imagen":null}]}

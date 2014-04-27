@@ -20,6 +20,9 @@ class Login extends Conexion{
                     "api_key" =>$response->api_key,
                     "vencimiento" => $formatDate
                 ));
+                Notificar("login",array(
+                    'quien'=>$response->nombre
+                ));
             }
             else{
                 http_response_code(401);

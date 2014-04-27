@@ -11,6 +11,9 @@
 	socket.on('cambio_estado', function (data) {
 		flisol.mostrar(data.info);
 	});
+	socket.on('login', function (data) {
+		flisol.mostrar(data.info);
+	});
 	var flisol={
 		mostrar:function(text){
 			var div=document.getElementById("datos");

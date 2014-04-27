@@ -6,3 +6,10 @@ function personaConectada(){
     $conectado=$c->bd->usuario()->select("persona.id")->where("api_key:api_key=?",$header['API_KEY'])->fetch();
     return $conectado["id"];
 }
+
+function Notificar($event,$args){
+	$elephant = new ElephantIO('http://localhost:1123');
+    $elephant->init();
+    $elephant->emit($event,$args);
+    $elephant->close();
+}

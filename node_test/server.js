@@ -15,4 +15,10 @@ io.sockets.on('connection', function (socket) {
       cliente.emit('cambio_estado',{info:data.quien+' ha cambiado de estado'});
     }
   });
+  socket.on('login', function (data) {
+    for(i=0;i<clientes.length;i++){
+      var cliente=clientes[i];
+      cliente.emit('login',{info:data.quien+' ha iniciado sesión'});
+    }
+  });
 });

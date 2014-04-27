@@ -12,13 +12,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('cambio_estado', function (data) {
     for(i=0;i<clientes.length;i++){
       var cliente=clientes[i];
-      cliente.emit('notificacion',{info:data.quien+' ha cambiado de estado'});
-    }
-  });
-  socket.on('nuevo_equipo', function (data) {
-    for(i=0;i<clientes.length;i++){
-      var cliente=clientes[i];
-      cliente.emit('notificacion',{info:data.quien+' ha agregado un equipo'});
+      cliente.emit('cambio_estado',{info:data.quien+' ha cambiado de estado'});
     }
   });
 });

@@ -9,7 +9,6 @@ io = require('socket.io').listen(app);
 var clientes=[];
 io.sockets.on('connection', function (socket) {
   clientes.push(socket);
-  socket.emit('news', { hello: 'world' });
   socket.on('cambio_estado', function (data) {
     for(i=0;i<clientes.length;i++){
       var cliente=clientes[i];

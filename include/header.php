@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="utf-8">
   <title>Dashboard - Flisol 2014</title>
@@ -12,8 +12,6 @@
   <link href="assets/css/style.css" rel="stylesheet">
   <link href="assets/css/pages/dashboard.css" rel="stylesheet">
   <link href="assets/css/select2.css" rel="stylesheet">
-
-
 </head>
 <body>
   <div class="navbar navbar-fixed-top">
@@ -58,7 +56,6 @@
       <div class="container">
         <ul id="menu_recepcionista" class="mainnav menuFlisol" style="display:none">
           <li><a><i class="icon-dashboard"></i><span data-vista="dashboard">Dashboard</span> </a> </li>
-
           <li><a href="#registrar_persona" data-toggle="modal"><i class="icon-user"></i><span>Agregar persona</span> </a> </li>
           <li><a><i data-vista="formulario_equipo" data-flisol="buscarPersona" class="icon-desktop"></i><span data-vista="formulario_equipo" data-flisol="buscarPersona">Agregar equipo</span> </a></li>
           <li><a><i data-flisol="enviarEquipo" class="icon-truck"></i><span data-flisol="enviarEquipo">Enviar equipo</span> </a> </li>        

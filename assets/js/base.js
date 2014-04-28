@@ -12,7 +12,6 @@ var flisol = {
 	replace:function(find,replace,str){
 		return str.replace(new RegExp(find, 'g'),replace);
 	}
-
 };
 
 /*
@@ -22,7 +21,6 @@ flisol.vistas={
 	dashboard:$("#dashboard").remove(),
 	formulario_equipo:$("#formulario_equipo").remove(),
 	comentarios:$("#comentarios").remove()
-
 };
 flisol.setVista=function(vista){
 	$("#contenedor").html(flisol.vistas[vista].html());
@@ -82,6 +80,10 @@ flisol.logoutFlisol = function(){
 	$('.menuFlisol').hide();
 }
 
+/*
+WARNING: nombre excluyente, inicialmente fue sólo para buscar persona
+pero después ya se añadió la funcionalidad como gestor dińamico de la vista
+*/
 flisol.buscarPersona = function(){
 	var controlComentario=true;
 	$("#comentario_registro").keydown(function(e){
@@ -110,11 +112,15 @@ flisol.buscarPersona = function(){
 	})
 	.done(function(json) {
 		$("#e10").select2({
-		    data:json.personas
+			data:json.personas
 		});
 	})
 }
 
+/*
+Función que obtiene el texto de los comentarios que se agruegan utilizando la plantilla
+comentario, en este caso particular del formulario de registro de equipo.
+*/
 flisol.comentariosRegistro=function(){
 	var comentarios=$("#comentarios_registro>li>div>.text");
 	var texto="[";
@@ -129,21 +135,29 @@ flisol.comentariosRegistro=function(){
 	return texto;
 }
 
+/*
+Función que registra equipo, serializa los datos del formulario y con 
+comentariosRegistro() obtiene los comentarios del registro, que son JSON
+*/
 flisol.registrarEquipo = function(){
 	$.ajax({
 		type:"POST",
-		beforeSend: function (request)
-		{
+		beforeSend: function (request){
 			request.setRequestHeader("API_KEY", sessionStorage.api_key);
 		},
 		url:'Equipo',
 		data: $("#registrar_equipo_form").serialize()+"&comentarios="+flisol.comentariosRegistro(),
 		success: function(msg) {
-
+			//WARNING: mostrar mensaje u alerta cuando se registra el equipo.
 		}
 	});
 }
 
+/*
+WARNING: cambiar nombre de la función pues más que enviar equipo, 
+es la función que dinamiza el contenido de la vista enviar equipo del rol
+RECEPCIONISTA
+*/
 flisol.enviarEquipo = function() {	
 	$.ajax({
 		url:"Equipo/tipo/REGISTRO",
@@ -152,7 +166,7 @@ flisol.enviarEquipo = function() {
 	})
 	.done(function(json) {
 		$("#e11").select2({
-		    data: json.equipos
+			data: json.equipos
 		});
 	});
 	$.ajax({
@@ -167,24 +181,25 @@ flisol.enviarEquipo = function() {
 			arreglo[i]={id:p.id,text:p.nombre};
 		}
 		$("#e12").select2({
-		    data: arreglo
+			data: arreglo
 		});
 	});
 	$("#enviar_equipo").modal("show");
 }
 
+/*
+Función que registra una nueva persona en el sistema
+*/
 flisol.registrarPersona = function(){	
 	$.ajax({
 		type:"POST",
-		beforeSend: function (request)
-		{
+		beforeSend: function (request){
 			request.setRequestHeader("API_KEY", sessionStorage.api_key);
 		},
 		url:'Persona',
 		data: $("#registrar_persona_form").serialize(),
 		success: function(msg) {
-			$("#results").append("The result =" + StringifyPretty(msg));
-
+			//WARNING: Mostrar alerta o algo para mayor comprensión.
 		}
 	});
 };

@@ -21,6 +21,7 @@ Se cargan las vistas y se tienen listas para presentación
 flisol.vistas={
 	dashboard:$("#dashboard").remove(),
 	formulario_equipo:$("#formulario_equipo").remove(),
+    dashboard_DInstalacion:$("#dashboard_DInstalacion").remove(),
 	comentarios:$("#comentarios").remove()
 
 };

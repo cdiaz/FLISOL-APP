@@ -12,7 +12,7 @@
   <link href="assets/css/style.css" rel="stylesheet">
   <link href="assets/css/pages/dashboard.css" rel="stylesheet">
   <link href="assets/css/select2.css" rel="stylesheet">
-
+  <script src="http://localhost:1123/socket.io/socket.io.js"></script>
 
 </head>
 <body>
@@ -77,3 +77,5 @@
       </div>
     </div> 
   </div>
+
+  <div id="datos"></div>

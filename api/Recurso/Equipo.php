@@ -68,13 +68,13 @@ class Equipo extends Conexion{
                 $equipo=new stdClass();
                 $equipo->id=$e["equipo_id"];
                 $equipo->text= "No: ".$e["equipo_id"].' - '.$e["tipo_equipo"].' - '.$e["marca"].' - '.$e["modelo"];
-                //$equipo->tipo=$e["tipo_equipo"];
-                //$equipo->marca=$e["marca"];
-                //$equipo->modelo=utf8_encode($e["modelo"]);
-                //$equipo->estado_actual=$e["tipo"];
-                //$equipo->tiempo=$e["tiempo"];
-                //$equipo->participante=utf8_encode($e->persona["nombre"]);
-                //$equipo->imagen=$e->persona["imagen"];
+                $equipo->tipo=$e["tipo_equipo"];
+                $equipo->marca=$e["marca"];
+                $equipo->modelo=utf8_encode($e["modelo"]);
+                $equipo->estado_actual=$e["tipo"];
+                $equipo->tiempo=$e["tiempo"];
+                $equipo->participante=utf8_encode($e->persona["nombre"]);
+                $equipo->imagen=$e->persona["imagen"]; 
                 $response->equipos[]=$equipo;
             }
             //OUTPUT: {"total":1,"equipos":[{"id":"16","tipo":"PORTATIL","marca":"TOSHIBA","modelo":"123487","estado_actual":"REGISTRO"
@@ -101,7 +101,7 @@ class Equipo extends Conexion{
             //,"estado_actual":"REGISTRO","tiempo":"2014-04-23 23:29:07","propietario":"Sergio Andr\u00e9s \u00d1ustes"}]}
 
         }
-        //Consulta los dueños de equipo de un sistema registrados
+        //Consulta los dueños de equipo de un sistema registrados está 
         else{
             $equipos=$this->bd->equipo->select("equipo.tipo as tipo_equipo,equipo.marca,equipo.modelo,estado:*")->order("estado:tiempo DESC")->group("equipo.id");
             $response->total=$equipos->count();

@@ -1,4 +1,22 @@
+window.socket = io.connect('http://localhost:1123');
+
+
+socket.on('cambio_estado', function (data) {
+	flisol.mostrar(data.info);
+});
+socket.on('login', function (data) {
+	flisol.mostrar(data.info);
+});
+
+
 var flisol = {
+
+	mostrar:function(text){
+		var div=document.getElementById("datos");
+		div.innerHTML+=text+"<br>";
+	},
+
+
 	controlLogin:false,
 	toggleLogin:function(){
 		if(this.controlLogin){
@@ -20,8 +38,11 @@ Se cargan las vistas y se tienen listas para presentación
 */
 flisol.vistas={
 	dashboard:$("#dashboard").remove(),
+	dashboard_recepcion:$("#dashboard_recepcion").remove(),
 	formulario_equipo:$("#formulario_equipo").remove(),
-	comentarios:$("#comentarios").remove()
+	comentarios:$("#comentarios").remove(),
+	lista_equipos:$("#lista_equipos").remove()
+
 
 };
 flisol.setVista=function(vista){
@@ -69,6 +90,25 @@ flisol.login_RECEPCIONISTA = function(){
 	$('#menuLogged').show();
 	$('#menuLogin').hide();	
 	$('#menuLogged>a>span.nombre').html(sessionStorage.nombre);
+	flisol.setVista("dashboard_recepcion");
+	$.ajax({
+		url:"Equipo/tipo/REGISTRO",
+		type: "GET",
+		dataType: "json",
+	})
+	.done(function(data) {
+		var html="";
+		for (var i = 0; i < data.equipos.length; i++) {
+			var d = data.equipos[i];
+			html+="<tr>";
+			html+="<td>"+d.marca+"</td>";
+			html+="<td>"+d.modelo+"</td>";
+			html+="<td>"+d.participante+"</td>";
+			html+="<td>--aqui botones con un data-event=x y data-id=y y lo agregan en el $(window).click-</td>";
+			html+="</tr>";
+		}
+		$("#lista_equipos_recepcion>div>table>tbody").html(html);
+	});
 };
 
 /*
@@ -110,7 +150,7 @@ flisol.buscarPersona = function(){
 	})
 	.done(function(json) {
 		$("#e10").select2({
-		    data:json.personas
+			data:json.personas
 		});
 	})
 }
@@ -152,7 +192,7 @@ flisol.enviarEquipo = function() {
 	})
 	.done(function(json) {
 		$("#e11").select2({
-		    data: json.equipos
+			data: json.equipos
 		});
 	});
 	$.ajax({
@@ -167,7 +207,7 @@ flisol.enviarEquipo = function() {
 			arreglo[i]={id:p.id,text:p.nombre};
 		}
 		$("#e12").select2({
-		    data: arreglo
+			data: arreglo
 		});
 	});
 	$("#enviar_equipo").modal("show");
@@ -217,7 +257,6 @@ $.ajaxPrefilter(function(options) {
 	options.url = "http://localhost/FLISOL-APP/api/api.php/" +options.url;
 });
 
-prueba cristiam
 /*
 Comportamiento por defecto cuando ocurre un error.
 */

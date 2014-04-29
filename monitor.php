@@ -1,6 +1,4 @@
-<button data-flisol="cambio_estado">Cambiar un estado</button><br>
 <div id="datos">
-
 </div>
 
 <script src="jquery.js"></script>
@@ -19,23 +17,7 @@
 			var div=document.getElementById("datos");
 			div.innerHTML+=text+"<br>";
 		},
-		cambio_estado:function(){
-			$.ajax({
-				url:"cambiar_estado.php",
-				data:{quien:soy},
-				type:"POST"
-			});
-		}
+		
 	};
-	window.onclick=function(e){
-		var button=e.srcElement||e.target;
-		var dataFlisol=button.getAttribute("data-flisol");
-		if(dataFlisol!==null){
-			try{
-				flisol[dataFlisol]();
-			}catch(error){}
-		}
-	};
-	flisol.mostrar("<h1>"+soy+"</h1>");
-</script>
 
+</script>

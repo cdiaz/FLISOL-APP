@@ -217,6 +217,7 @@ $.ajaxPrefilter(function(options) {
 	options.url = "http://localhost/FLISOL-APP/api/api.php/" +options.url;
 });
 
+prueba cristiam
 /*
 Comportamiento por defecto cuando ocurre un error.
 */

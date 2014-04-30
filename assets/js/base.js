@@ -230,10 +230,9 @@ $(window).click(function(e){
 Añadimos la url de la API por defecto.
 */
 $.ajaxPrefilter(function(options) {
-	options.url = "http://localhost/FLISOL-APP/api/api.php/" +options.url;
+	options.url = location.origin+location.pathname+"api/api.php/" +options.url;
 });
 
-prueba cristiam
 /*
 Comportamiento por defecto cuando ocurre un error.
 */

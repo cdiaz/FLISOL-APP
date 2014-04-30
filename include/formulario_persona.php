@@ -1,5 +1,5 @@
 <div id="formulario_persona">
 	<form>
-		hola .D
+		En construcción.
 	</form>
 </div>

@@ -1,6 +1,6 @@
-API
-* Hay que revisar los get de Equipo, pues no me traen el último estado o estado_actual
-* Falta realizar lo del api_key
-* En la base de datos, los índices únicos en ESTADO están dando problemas...
-VISTAS
-* Hacerlas.
+0) Crear subnamespace pues ya flisol={} tiene muchas funciones y no se lee bien su funcionamiento
+0.5) Leer los WARNING!!! 
+0.6) Corregir los WARNING
+1) Comentar código
+2) Mezclar ramas
+3) Actualizar el script de la BD

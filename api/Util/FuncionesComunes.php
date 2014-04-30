@@ -1,4 +1,8 @@
 <?php
+/** PHP API RESTFUL
+* @author Sergio Andrés Ñustes, infinito84@gmail.com
+* @license http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
+*/
 //Esto se convertirá en una clase en una futura versión XD
 function personaConectada(){
 	$header = apache_request_headers();

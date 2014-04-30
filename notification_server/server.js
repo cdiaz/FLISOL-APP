@@ -7,6 +7,7 @@ app.listen(1123);
 io = require('socket.io').listen(app);
 
 var clientes=[];
+//En construcción de eventos reales.
 io.sockets.on('connection', function (socket) {
   clientes.push(socket);
   socket.on('cambio_estado', function (data) {
@@ -16,6 +17,7 @@ io.sockets.on('connection', function (socket) {
     }
   });
   socket.on('login', function (data) {
+    console.log("conexion: "+data);
     for(i=0;i<clientes.length;i++){
       var cliente=clientes[i];
       cliente.emit('login',{info:data.quien+' ha iniciado sesión'});

@@ -1,4 +1,8 @@
 <?php
+/** PHP API RESTFUL
+* @author Sergio Andrés Ñustes, infinito84@gmail.com
+* @license http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
+*/
 class Estado extends Conexion{
 
     //Agrega el estado al equipo especificado junto con sus comentarios, estos comentarios es un parametro que se envia en formato json
